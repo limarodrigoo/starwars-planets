@@ -3,12 +3,13 @@ import PlanetContext from '../context/PlanetsContext';
 import TableHead from './TableHead';
 
 export default function Table() {
-  const { planetsResults } = useContext(PlanetContext);
+  const { filteredPlanets } = useContext(PlanetContext);
+
   return (
     <table>
       <TableHead />
       <tbody>
-        {planetsResults.map((planet) => (
+        {filteredPlanets.map((planet) => (
           <tr key={ planet.name }>
             <td>{planet.name}</td>
             <td>{planet.rotation_period}</td>
