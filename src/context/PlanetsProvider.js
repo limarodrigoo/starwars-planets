@@ -10,6 +10,7 @@ export default function PlanetsProvider({ children }) {
   const [planetsResults, setPlanetsResults] = useState([]);
   const [filters, setFilters] = useState(defaultFilter);
   const [filteredPlanets, setFilteredPlanets] = useState([]);
+  const [filterByNumericValues, setfilterByNumericValues] = useState([]);
 
   const API_URL = 'https://swapi-trybe.herokuapp.com/api/planets/';
   useEffect(() => {
@@ -29,6 +30,31 @@ export default function PlanetsProvider({ children }) {
     setFilteredPlanets(result);
   };
 
+  const setComparison = (column, comparison, value) => {
+    switch (comparison) {
+    case 'maior que':
+      return filteredPlanets.filter((planet) => Number(planet[column]) > Number(value));
+    case 'menor que':
+      return filteredPlanets.filter((planet) => Number(planet[column]) < Number(value));
+    default:
+      return filteredPlanets.filter((planet) => Number(planet[column]) === Number(value));
+    }
+  };
+
+  const filterPlanetsByNum = (column, comparison, value) => {
+    setfilterByNumericValues([
+      ...filterByNumericValues,
+      {
+        column,
+        comparison,
+        value,
+      },
+    ]);
+    const result = setComparison(column, comparison, value);
+
+    setFilteredPlanets(result);
+  };
+
   const contextValue = {
     planetsResults,
     setPlanetsResults,
@@ -37,6 +63,9 @@ export default function PlanetsProvider({ children }) {
     filterPlanetsByName,
     filters,
     setFilters,
+    filterByNumericValues,
+    setfilterByNumericValues,
+    filterPlanetsByNum,
   };
   return (
     <PlanetContext.Provider value={ contextValue }>
@@ -46,5 +75,5 @@ export default function PlanetsProvider({ children }) {
 }
 
 PlanetsProvider.propTypes = {
-  children: PropTypes.objectOf(PropTypes.array).isRequired,
+  children: PropTypes.node.isRequired,
 };
