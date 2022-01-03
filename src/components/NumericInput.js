@@ -4,22 +4,23 @@ import PlanetContext from '../context/PlanetsContext';
 export default function NumericInput() {
   const { filterPlanetsByNum } = useContext(PlanetContext);
   const [valueToFilter, setValueToFilter] = useState(0);
+  const columnsInitial = ['population', 'orbital_period',
+    'diameter', 'rotation_period', 'surface_water'];
+  const [columns, setcolumns] = useState(columnsInitial);
 
   const handleChange = ({ target: { value } }) => {
     setValueToFilter(value);
   };
 
   const onClick = () => {
-    const col = document.getElementById('columns').value;
+    const col = document.getElementById('columns');
     const comparison = document.getElementById('option').value;
     const { value } = document.getElementById('value');
-
-    console.log(col, comparison, value);
-    filterPlanetsByNum(col, comparison, value);
+    const removeColumn = columns.filter((column) => column !== col.value);
+    setcolumns(removeColumn);
+    filterPlanetsByNum(col.value, comparison, value);
   };
 
-  const columns = ['population', 'orbital_period',
-    'diameter', 'rotation_period', 'surface_water'];
   const options = ['maior que', 'menor que', 'igual a'];
 
   return (
